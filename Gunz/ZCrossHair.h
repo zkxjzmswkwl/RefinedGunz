@@ -22,7 +22,7 @@
 enum ZCROSSHAIR_STATUS 
 {
 	ZCS_NORMAL		= 0,
-	ZCS_PICKENEMY
+	ZCS_PICKENEMY	= 1
 };
 
 enum ZCrossHairPreset

@@ -460,6 +460,7 @@ bool ZConfiguration::LoadConfig(const char* szFileName)
 #ifdef ENABLE_FOV_OPTION
 			childElement.GetChildContents(&FOV, ZTOK_ETC_FOV);
 #endif
+			childElement.GetChildContents(&CrosshairScale, ZTOK_ETC_XHAIRSCALE);
 			childElement.GetChildContents(&ColorInvert, ZTOK_ETC_COLORINVERT);
 			childElement.GetChildContents(&Monochrome, ZTOK_ETC_MONOCHROME);
 			childElement.GetChildContents(&AsyncScreenshots, ZTOK_ETC_ASYNCSCREENSHOTS);
@@ -480,6 +481,16 @@ bool ZConfiguration::LoadConfig(const char* szFileName)
 			}
 
 			childElement.GetChildContents(&FastWeaponCycle, ZTOK_ETC_FASTWEAPONCYCLE);
+		}
+
+		if (parentElement.FindChildNode(ZTOK_ETC, &childElement))
+		{
+			char buf[1024];
+			if (childElement.GetChildContents(buf, ZTOK_ETC_XHAIRSCALE))
+			{
+				mlog("BALLS");
+				GetEtc()->fCrosshairScale = stof(buf);
+			}
 		}
 
 
@@ -708,6 +719,7 @@ bool ZConfiguration::SaveToFile(const char *szFileName, const char* szHeader)
 #ifdef ENABLE_FOV_OPTION
 		Section.Add(ZTOK_ETC_FOV, FOV);
 #endif
+		Section.Add(ZTOK_ETC_XHAIRSCALE, CrosshairScale);
 		Section.Add(ZTOK_ETC_COLORINVERT, ColorInvert);
 		Section.Add(ZTOK_ETC_MONOCHROME, Monochrome);
 		Section.Add(ZTOK_ETC_ASYNCSCREENSHOTS, AsyncScreenshots);
@@ -736,10 +748,10 @@ void ZConfiguration::Init()
 	m_Video.FullscreenMode = FullscreenType::Fullscreen;
 	auto Width = GetSystemMetrics(SM_CXSCREEN);
 	if (Width == 0)
-		Width = 1024;
+		Width = 1920;
 	auto Height = GetSystemMetrics(SM_CYSCREEN);
 	if (Height == 0)
-		Height = 768;
+		Height = 1080;
 	m_Video.nWidth = Width;
 	m_Video.nHeight = Height;
 	m_Video.nColorBits = 32;
@@ -778,7 +790,8 @@ void ZConfiguration::Init()
 	m_Etc.nNetworkPort2 = 7800;
 	m_Etc.nCrossHair = 0;
 	m_Etc.bInGameNoChat = false;
-
+	m_Etc.fCrosshairScale = 1.0f;
+	
 	m_bOptimization = false;
 	
 	memset(m_szServerIP, 0, sizeof(m_szServerIP));

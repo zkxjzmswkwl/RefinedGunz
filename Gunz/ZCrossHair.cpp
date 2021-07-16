@@ -167,13 +167,12 @@ void ZCrossHair::DrawCrossHair(MDrawContext* pDC, MBitmap** ppBitmaps, MPOINT& c
 	}
 }
 
-
 void ZCrossHair::Draw(MDrawContext* pDC)
 {
 	if(!m_bVisible) return;
 	if (g_pGame->m_pMyCharacter == NULL) return;
 
-	const float sizefactor = (float)MGetWorkspaceWidth() / (float)800  * 1.f;
+	const float sizefactor = (float)MGetWorkspaceWidth() / (float)800  * ZGetConfiguration()->GetEtc()->fCrosshairScale;
 
 	MPOINT center(MGetWorkspaceWidth()/2,MGetWorkspaceHeight()/2);
 
